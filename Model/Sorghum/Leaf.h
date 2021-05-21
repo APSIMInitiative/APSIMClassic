@@ -161,6 +161,7 @@ namespace Sorghum {
 			double getLAI(void)const{return lai;}
 			double getDltSlai(void)const{return dltSlai;}
 			void  addDltSlai(double add);
+            bool   killedByFrostToday;
 
 
 			double getCoverGreen(void)const{return coverGreen;}

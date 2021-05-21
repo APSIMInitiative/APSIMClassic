@@ -105,6 +105,7 @@ void Leaf::initialize(void)
    dltSlaiLight = 0;
    dltSlaiWater = 0;
    dltSlaiFrost = 0;
+   killedByFrostToday = false;
 
    PlantPart::initialize();
    }
@@ -195,7 +196,7 @@ void Leaf::updateVars(void)
    dltNSenesced = 0.0;
 
    // leaf area
-   if(lai < 0.001)lai = 0.0;
+   if(lai < 0.0) throw std::runtime_error("LAI is negative.");
    lai += dltLAI;
 
    sLai += dltSlai;
@@ -334,6 +335,8 @@ void Leaf::senesceArea(void)
 //------------------------------------------------------------------------------------------------
 double Leaf::calcLaiSenescenceFrost(void)
    {
+   killedByFrostToday = false;
+
    //frostKillSevere will kill the plant at any stage
    //frostKill will remove LAI but only kill the plant between FloralInit and Flowering
    
@@ -365,18 +368,26 @@ double Leaf::calcLaiSenescenceFrost(void)
       else
          {
             //between floralInit and Flowering the plant will be killed
+            killedByFrostToday = true;
             senescedLAI = lai;
+
+            sprintf(msg, "Frost Event: (Fatal) \n");
+            scienceAPI.write(msg);
+            sprintf(msg, "\t\tMin Temp      = %.2f \t\t Senesced LAI    = %.2f\n", plant->today.minT, senescedLAI);
+            scienceAPI.write(msg);
          }
       }
    else
       {
+         //the plant will be killed as it's LAI will be 0
+         killedByFrostToday = true;
+         senescedLAI = lai;
+
          //Temperature is colder or equal to frostKillSevere parameter
          sprintf(msg, "Frost Event: (Fatal) \n");
          scienceAPI.write(msg);
          sprintf(msg, "\t\tMin Temp      = %.2f \t\t Senesced LAI    = %.2f\n", plant->today.minT, lai - 0.01);
          scienceAPI.write(msg);
-         //the plant will be killed as it's LAI will be 0
-         senescedLAI = lai;
       }
       
       return senescedLAI;

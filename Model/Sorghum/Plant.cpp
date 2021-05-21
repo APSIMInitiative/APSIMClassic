@@ -416,7 +416,8 @@ void Plant::death(void)
 
    if (stage > fi && stage < maturity)
       {
-      if (leaf->getLAI() - leaf->getDltSlai() < 0.0001)
+      if (leaf->killedByFrostToday || 
+          leaf->getLAI() - leaf->getDltSlai() < 0.0001)
          {
          dltDeadPlants = -plantDensity;
          scienceAPI.write(" ********** Crop failed due to loss of leaf area ********\n");
@@ -427,7 +428,8 @@ void Plant::death(void)
 
    if (stage >= flag && stage < maturity)
       {
-      if (leaf->getLAI() - leaf->getDltSlai() < 0.1)
+      if (leaf->killedByFrostToday || 
+          leaf->getLAI() - leaf->getDltSlai() < 0.1)
          {
          dltDeadPlants = -plantDensity;
          scienceAPI.write(" ********** Crop failed due to loss of leaf area ********");
