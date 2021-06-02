@@ -105,6 +105,7 @@ namespace Maize {
          double tplaPot;
          double tpla;
          double spla;
+         double gpla;
 
          // senescence
          double sLai;
