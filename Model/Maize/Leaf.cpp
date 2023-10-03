@@ -34,7 +34,7 @@ void Leaf::doRegistrations(void)
    scienceAPI.expose("DeltaSLAI",      "m2/m2", "Leaf area senescence rate",       false, dltSlai);
    scienceAPI.expose("TPLA",           "m2",    "Total plant leaf area",           false, tpla);
    scienceAPI.expose("SPLA",           "m2",    "Senesced plant leaf area",        false, spla);
-   scienceAPI.expose("GPLA",           "m2",    "Green plant leaf area",           false, spla);
+   scienceAPI.expose("GPLA",           "m2",    "Green plant leaf area",           false, gpla);
    scienceAPI.expose("LeafNo",         "leaves","Number of fully expanded leaves", false, nLeaves);
    scienceAPI.expose("FinalLeafNo", "leaves", "Final Leaf Number",                 false, finalLeafNo);
    scienceAPI.expose("LeafGreenWt",    "g/m^2", "Live leaf dry weight",            false, dmGreen);
@@ -73,6 +73,7 @@ void Leaf::initialize(void)
    dltSlai = 0.0;
    tpla = 0.0;
    spla= 0.0;
+   gpla= 0.0;
    tplaMax = 0.0;
    tplaPot = 0.0;
    dltSlaiN = 0.0;
@@ -236,8 +237,9 @@ void Leaf::updateVars(void)
 
    sLai += dltSlai;
    lai -= dltSlai;
-   tpla = lai / density * 10000;
-   spla = sLai / density * 10000;
+   gpla = lai / density * smm2sm;
+   spla = sLai / density * smm2sm;
+   tpla = gpla + spla;
 
    dltSlaiN = 0.0;
    dltSlai = 0.0;
